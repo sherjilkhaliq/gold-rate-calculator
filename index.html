@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Gold Rate Calculator - calculate gold value, wastage and making charges in PKR.">
+<meta name="theme-color" content="#b68a2c">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 rx=%2716%27 fill=%27%232c2418%27/%3E%3Cpath d=%27M16 45 27 15h10l11 30h-9l-2.5-7H26.5L24 45h-8Zm13-14h5l-2.5-8L29 31Z%27 fill=%27%23e4b84e%27/%3E%3C/svg%3E">
+<title>Gold Rate Calculator</title>
+<link rel="stylesheet" href="css/style.css"></style>
+</head>
+<body>
+<div class="wrap">
+  <div class="card">
+    <header>
+      <div class="brand">
+        <div class="brand-icon">◆</div>
+        <div>
+          <h1>Gold Rate Calculator</h1>
+          <p>Calculate gold value, wastage and making charges in PKR.</p>
+        </div>
+      </div>
+      <div class="badge">PKR • Tola • Gram • 24K / 22K / 21K</div>
+    </header>
+
+    <main>
+      <div class="section-title">Market rates</div>
+
+      <div class="grid">
+        <div class="field">
+          <label for="internationalRate">1. International Gold Rate (PKR / Tola)</label>
+          <div class="input-row">
+            <input id="internationalRate" type="number" min="0" step="0.01" placeholder="e.g. 4500">
+            <button id="goldBtn" type="button">Get Today's Rate</button>
+          </div>
+          <div class="hint">Enter the 24K international/market gold rate in Pakistani Rupees per tola.</div>
+        </div>
+
+        <div class="field">
+          <label for="usdPkr">2. USD → PKR Exchange Rate</label>
+          <div class="input-row">
+            <input id="usdPkr" type="number" min="0" step="0.01" placeholder="e.g. 280.50">
+            <button id="fxBtn" type="button">Get Today's Rate</button>
+          </div>
+          <div class="hint">This rate is available separately for reference and can be entered manually.</div>
+        </div>
+
+        <div class="field">
+          <label for="goldRate">3. Gold Rate (PKR / gram, selected karat)</label>
+          <input id="goldRate" class="calculated" type="number" readonly>
+          <div class="hint">Calculated from the PKR/tola rate and the selected karat. 1 tola = 11.6638125 grams.</div>
+        </div>
+      </div>
+
+      <div class="section-title" style="margin-top:30px;">Jewellery details</div>
+
+      <div class="two">
+        <div class="field">
+          <label for="polish">4. Making (PKR)</label>
+          <input id="polish" type="number" min="0" step="0.01" value="0" placeholder="e.g. 500">
+          <div class="hint">Enter the total making charge. This exact amount will be added to the total.</div>
+        </div>
+
+        <div class="field">
+          <label for="karat">Karat</label>
+          <select id="karat">
+            <option value="24">24 Karat</option>
+            <option value="22">22 Karat</option>
+            <option value="21" selected>21 Karat</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="wastage">Wastage</label>
+          <select id="wastage">
+            <option value="no">No</option>
+            <option value="yes">Yes (Standard 2 Masha per Tola)</option>
+            <option value="manual">Manual (grams)</option>
+          </select>
+        </div>
+
+        <div class="field hidden" id="wastageBox">
+          <label for="wastagePercent">Manual Wastage (grams)</label>
+          <input id="wastagePercent" type="number" min="0" step="0.01" value="0">
+          <div class="hint">Enter the exact wastage weight in grams.</div>
+        </div>
+
+        <div class="field" id="wastageGramsBox">
+          <label for="wastageGramsDisplay">Wastage (grams per Tola)</label>
+          <input id="wastageGramsDisplay" class="calculated" type="number" readonly>
+          <div class="hint">Calculated automatically from Masha. Standard 2 Masha = 1.994 grams.</div>
+        </div>
+
+        <div class="field hidden" id="defaultWastageBox">
+          <label for="defaultWastage">Standard Wastage (Masha per Tola)</label>
+          <input id="defaultWastage" type="number" min="0" step="0.01" value="2">
+          <div class="hint">Standard wastage: 2 Masha for every 1 Tola.</div>
+        </div>
+
+        <div class="field">
+          <label for="weight">Weight (grams)</label>
+          <input id="weight" type="number" min="0" step="0.001" value="0" placeholder="e.g. 10.500">
+        </div>
+      </div>
+
+      <div class="status" id="status"></div>
+
+      <div class="result">
+        <h2>Calculation Summary</h2><div class="result-subtitle">Gold Rate + Wastage + Making</div>
+        <div class="line"><span>Gold rate per tola</span><strong id="outTolaRate">PKR 0.00 / tola</strong></div>
+        <div class="line"><span>Gold rate per gram</span><strong id="outRate">PKR 0.00 / g</strong></div>
+        <div class="line"><span>Gold value</span><strong id="outGold">PKR 0.00</strong></div>
+        <div class="line"><span>Wastage (Masha/Tola)</span><strong id="outWastage">PKR 0.00</strong></div>
+        <div class="line"><span>Making</span><strong id="outPolish">PKR 0.00</strong></div>
+        <div class="line total"><span>TOTAL</span><strong id="outTotal">PKR 0.00</strong></div>
+      </div>
+
+      <div class="footer-note">Rates are indicative market rates. Verify the actual buying/selling rate before completing a transaction.</div>
+      <div class="site-footer">Gold Rate Calculator • Simple jewellery valuation tool</div>
+    </main>
+  </div>
+</div>
+
+
+    <script src="js/app.js"></script>
+</body>
+</html>
