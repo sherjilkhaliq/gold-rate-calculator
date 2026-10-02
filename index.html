@@ -7,7 +7,8 @@
 <meta name="theme-color" content="#b68a2c">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 rx=%2716%27 fill=%27%232c2418%27/%3E%3Cpath d=%27M16 45 27 15h10l11 30h-9l-2.5-7H26.5L24 45h-8Zm13-14h5l-2.5-8L29 31Z%27 fill=%27%23e4b84e%27/%3E%3C/svg%3E">
 <title>Gold Rate Calculator</title>
-<link rel="stylesheet" href="css/style.css"></style>
+<link rel="stylesheet" href="css/style.css">
+</style>
 </head>
 <body>
 <div class="wrap">
@@ -28,27 +29,33 @@
 
       <div class="grid">
         <div class="field">
-          <label for="internationalRate">1. International Gold Rate (PKR / Tola)</label>
+          <label for="xauUsd">1. Live XAU/USD Spot (USD / Troy Ounce)</label>
           <div class="input-row">
-            <input id="internationalRate" type="number" min="0" step="0.01" placeholder="e.g. 4500">
-            <button id="goldBtn" type="button">Get Today's Rate</button>
+            <input id="xauUsd" class="calculated" type="number" min="0" step="0.01" readonly>
+            <button id="goldBtn" type="button">Refresh Live Rate</button>
           </div>
-          <div class="hint">Enter the 24K international/market gold rate in Pakistani Rupees per tola.</div>
+          <div class="hint">Fetched automatically from the Gold API. XAU/USD is the international 24K spot price per troy ounce.</div>
         </div>
 
         <div class="field">
           <label for="usdPkr">2. USD → PKR Exchange Rate</label>
           <div class="input-row">
-            <input id="usdPkr" type="number" min="0" step="0.01" placeholder="e.g. 280.50">
-            <button id="fxBtn" type="button">Get Today's Rate</button>
+            <input id="usdPkr" class="calculated" type="number" min="0" step="0.01" readonly>
+            <button id="fxBtn" type="button">Refresh FX Rate</button>
           </div>
-          <div class="hint">This rate is available separately for reference and can be entered manually.</div>
+          <div class="hint">Latest USD/PKR reference rate. It is used together with XAU/USD to calculate the PKR/tola rate.</div>
         </div>
 
         <div class="field">
-          <label for="goldRate">3. Gold Rate (PKR / gram, selected karat)</label>
+          <label for="internationalRate">3. International Gold Rate (PKR / Tola)</label>
+          <input id="internationalRate" class="calculated" type="number" readonly>
+          <div class="hint">Automatically calculated: XAU/USD × USD/PKR × (11.6638125 ÷ 31.1034768). This is the 24K spot-equivalent PKR/tola rate.</div>
+        </div>
+
+        <div class="field">
+          <label for="goldRate">4. Gold Rate (PKR / gram, selected karat)</label>
           <input id="goldRate" class="calculated" type="number" readonly>
-          <div class="hint">Calculated from the PKR/tola rate and the selected karat. 1 tola = 11.6638125 grams.</div>
+          <div class="hint">Calculated from the 24K PKR/tola rate and the selected karat. 1 tola = 11.6638125 grams.</div>
         </div>
       </div>
 
@@ -75,14 +82,14 @@
           <select id="wastage">
             <option value="no">No</option>
             <option value="yes">Yes (Standard 2 Masha per Tola)</option>
-            <option value="manual">Manual (grams)</option>
+            <option value="manual">Manual (Masha)</option>
           </select>
         </div>
 
         <div class="field hidden" id="wastageBox">
-          <label for="wastagePercent">Manual Wastage (grams)</label>
+          <label for="wastagePercent">Wastage (Masha per Tola)</label>
           <input id="wastagePercent" type="number" min="0" step="0.01" value="0">
-          <div class="hint">Enter the exact wastage weight in grams.</div>
+          <div class="hint">Enter wastage in Masha for each 1 Tola.</div>
         </div>
 
         <div class="field" id="wastageGramsBox">
@@ -121,7 +128,7 @@
   </div>
 </div>
 
+<script src="js/script.js"></script>
 
-    <script src="js/app.js"></script>
 </body>
 </html>
