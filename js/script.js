@@ -4,7 +4,7 @@ const TROY_OZ_GRAMS = 31.1034768;
 // Gold: XAU/USD spot price.
 // FX: USD -> PKR daily exchange rate.
 const GOLD_API = "https://api.gold-api.com/price/XAU";
-const FX_API = "https://cdn.jsdelivr.net/gh/irfanokr/currency-api@main/v1/currencies/usd.json";
+const FX_API = "https://open.er-api.com/v6/latest/USD";
 
 const $ = id => document.getElementById(id);
 
@@ -101,7 +101,7 @@ async function getGoldRate() {
     const fxData = await fxResponse.json();
 
     const usdPerTroyOz = Number(goldData.price);
-    const usdPkr = Number(fxData.usd && fxData.usd.pkr);
+    const usdPkr = Number(fxData.rates && fxData.rates.PKR);
 
     if (!Number.isFinite(usdPerTroyOz) || !Number.isFinite(usdPkr)) {
       throw new Error("Invalid market rate received.");
@@ -145,7 +145,7 @@ async function getFxRate() {
     if (!response.ok) throw new Error("FX API returned HTTP " + response.status);
     const data = await response.json();
 
-    const rate = Number(data.usd && data.usd.pkr);
+    const rate = Number(data.rates && data.rates.PKR);
     if (!Number.isFinite(rate)) throw new Error("Invalid USD/PKR rate received.");
 
     $("usdPkr").value = rate.toFixed(2);
@@ -182,27 +182,6 @@ $("wastage").addEventListener("change", () => {
   calculate();
 });
 
-// Automatically fetch market rates when the page opens.
+// Automatically fetch market rates when the page opens and refresh every 60 seconds.
 getGoldRate();
-
-// Refresh periodically so the displayed XAU/USD and calculated PKR/tola stay current.
-// FX data may update less frequently than gold because the free FX source is a latest/daily reference feed.
-setInterval(getGoldRate, 60000);
-
-
-// Automatically refresh market rates every 60 seconds.
-let autoRefreshTimer = null;
-
-async function refreshLiveRates() {
-  if (typeof getGoldRate === "function") {
-    await getGoldRate();
-  }
-}
-
-function startAutoRefresh() {
-  if (autoRefreshTimer) clearInterval(autoRefreshTimer);
-  autoRefreshTimer = setInterval(refreshLiveRates, 60 * 1000);
-}
-
-// Load live rates automatically when the page opens.
-refreshLiveRates().finally(startAutoRefresh);
+setInterval(getGoldRate, 60 * 1000);
